@@ -9,10 +9,8 @@
         <input type="text" placeholder="Kod...">
         <button class="btn btn-positive btn-block" type="submit">Katıl</button>
     </form>
-</div>
-
-<div class="bar bar-standard bar-footer">
-  <button class="btn btn-primary btn-block js-share-action">Konumumu Paylaş</button>
+    <p class="text-center"><b>veya</b></p>
+    <button class="btn btn-primary btn-block js-share-action">Konumumu Paylaş</button>
 </div>
 
 @stop
