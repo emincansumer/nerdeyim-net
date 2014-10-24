@@ -11,4 +11,10 @@
 |
 */
 
-Route::get('/', 'HomeController@getIndex');
+/**
+ * Home route
+ */
+Route::get('/', function() 
+{
+    return View::make('home');
+});
