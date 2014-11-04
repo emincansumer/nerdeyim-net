@@ -78,3 +78,38 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+/*
+|--------------------------------------------------------------------------
+| 3 digit number filter
+|--------------------------------------------------------------------------
+|
+| This is responsible for filtering first parameter in the url to
+| be only 3 digit (between 100 and 999)
+|
+*/
+Route::filter('threedigit', function($route, $request, $value = '')
+{
+    $code = (int) $route->getParameter('code');
+
+    if ($code < 100 || $code > 999)
+    {
+        return Redirect::to('/');
+    }
+});
+
+/*
+|--------------------------------------------------------------------------
+| Non ajax filter
+|--------------------------------------------------------------------------
+|
+| This is responsible for filtering non ajax requests
+|
+*/
+Route::filter('nonajax', function($route, $request)
+{
+    if (!Request::ajax())
+    {
+        return Redirect::to('/');
+    }
+});

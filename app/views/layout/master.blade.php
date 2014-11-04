@@ -39,6 +39,7 @@
     </div>
 
     @section('script.footer')
+    <script src="{{ URL::asset('assets/js/zepto.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/ratchet.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/main.js') }}"></script>
     @show
