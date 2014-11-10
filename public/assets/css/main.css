@@ -1,3 +1,8 @@
+/* Site specific */
+.content h2{line-height: 34px;}
+#map{height:100%}
+
+/* General */
 .text-center{text-align:center;}
 .text-right{text-align:right;}
 .text-left{text-align:left;}

@@ -53,7 +53,7 @@ Route::get('/create', array('before' => 'nonajax', function()
 /**
  * Show room
  */
-Route::get('{code}', array('before' => 'threedigit', function()
+Route::get('{code}', array('before' => 'threedigit', function($code)
 {
-    return 'success';
+    return View::make('map');
 }));

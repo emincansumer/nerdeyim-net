@@ -3,12 +3,16 @@
  */
 App.loadingText = 'Yükleniyor...';
 App.shareLocationText = 'Konumumu Paylaş';
+App.notSupportedLocation = 'Tarayıcınız konum bulma özelliğini desteklemiyor';
 
 /**
  * Application methods
  */
 App.init = function(){
     this.bindEvents();
+    if($('#map-page')){
+        this.mapPage();
+    }
 }
 
 // bind all events to objects
@@ -41,9 +45,61 @@ App.bindEvents = function() {
     });
 }
 
+// Map page functions
+App.mapPage = function() {
+    this.initLocationShare();
+}
+
+// starts location sharing session
+App.initLocationShare = function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.handleGeolocation, this.handleGeolocationError, {
+            maximumAge: 600000,
+            enableHighAccuracy: true,
+            timeout: 10000
+        });
+    } else {
+        App.showError(App.notSupportedLocation);
+    }
+}
+
+App.handleGeolocation = function(position) {
+    var lat = position.coords.latitude + "";
+    var lng = position.coords.longitude + "";
+    App.initMap(lat, lng);
+}
+
+App.handleGeolocationError = function(error) {
+
+}
+
+// initializes google map
+App.initMap = function(lat, lng) {
+    // crate map
+    var mapDiv = $('#map-page');
+    var latlng = new google.maps.LatLng(lat, lng);
+    var mapOptions = {
+        zoom: 14,
+        center: latlng
+    };
+    var map = new google.maps.Map(document.getElementById(mapDiv.attr('id')),
+        mapOptions);
+
+    // add marker to map
+    var marker = new google.maps.Marker({
+        position: latlng
+    });
+    marker.setMap(map);
+}
+
 // redirect function
 App.redirect = function(url) {
     window.location.href = url;
+}
+
+// show error alert function
+App.showError = function(msg) {
+    alert(msg);
 }
 
 // fire application on dom load
