@@ -21,7 +21,8 @@ class CreateUsersTable extends Migration {
 		    $table->integer('code_id')->unsigned();
 		});
 		Schema::table('users', function($table) {
-	    	$table->foreign('code_id')->references('id')->on('codes');
+	    	$table->foreign('code_id')->references('id')
+	    		  ->on('codes')->onDelete('cascade');
 	    });
 	}
 

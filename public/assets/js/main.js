@@ -67,6 +67,7 @@ App.handleGeolocation = function(position) {
     var lat = position.coords.latitude + "";
     var lng = position.coords.longitude + "";
     App.initMap(lat, lng);
+    App.refreshStatus(lat, lng);
 }
 
 App.handleGeolocationError = function(error) {
@@ -90,6 +91,28 @@ App.initMap = function(lat, lng) {
         position: latlng
     });
     marker.setMap(map);
+}
+
+// refreshes location status of user
+App.refreshStatus = function(lat, lng) {
+    $.ajax({
+        type : "POST",
+        url : App.siteURL + '/update-location',
+        data: { lat : lat, lng : lng, user_id : $('#user_id').val() },
+        dataType : 'json',
+        cache : false,
+        success : function(data) {
+            
+        },
+        error : function(xhr, textStatus, errorThrown){
+            
+        },
+        complete : function(xhr, textStatus) {
+            setTimeout(function(){
+                App.refreshStatus(lat, lng);
+            }, 5000)
+        }
+    });
 }
 
 // redirect function

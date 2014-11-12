@@ -55,5 +55,30 @@ Route::get('/create', array('before' => 'nonajax', function()
  */
 Route::get('{code}', array('before' => 'threedigit', function($code)
 {
-    return View::make('map');
+    $room         = Code::where('value', $code)->first();
+    $num_of_users = User::where('code_id', $room->id)->count();
+    // only allow max. 2 people in a share session
+    if($num_of_users < 2) {
+        $user = User::create(array('code_id' => $room->id));
+        return View::make('map', compact('user'));
+    }
+
+    return Redirect::to('/');
+}));
+
+/**
+ * Update location of a user
+ */
+Route::post('update-location', array('before' => 'nonajax', function()
+{
+    $user_id = Input::get('user_id');
+    $user = User::find($user_id);
+
+    if($user){
+        $user->lat = Input::get('lat');
+        $user->lng = Input::get('lng');
+        $user->save();
+    }
+
+    return $user;
 }));

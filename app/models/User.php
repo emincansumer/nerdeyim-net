@@ -3,7 +3,12 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+class User extends Eloquent {
+
+	/**
+     * Fillable fields
+     */
+    protected $fillable = array('lat', 'lng', 'code_id');
 
 	/**
 	 * The database table used by the model.
@@ -17,7 +22,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
      */
 	public function code()
 	{
-		$this->belongsTo('Code');
+		return $this->belongsTo('Code');
 	}
 
 }

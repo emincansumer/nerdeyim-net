@@ -22,7 +22,7 @@ class Code extends Eloquent {
         parent::boot();
 
         // deleted event
-        Code::deleted(function($code){
+        Code::deleting(function($code){
              // remove users when code deleted
             $code->users()->delete();
         });
@@ -33,7 +33,7 @@ class Code extends Eloquent {
      */
     public function users() 
     {
-        $this->hasMany('User');
+        return $this->hasMany('User');
     }
 
 }
