@@ -74,11 +74,26 @@ Route::post('update-location', array('before' => 'nonajax', function()
     $user_id = Input::get('user_id');
     $user = User::find($user_id);
 
+    $result = new StdClass;
     if($user){
         $user->lat = Input::get('lat');
         $user->lng = Input::get('lng');
         $user->save();
+        $result->user = $user;
+        // ping to code not to be deleted
+        $code = Code::find($user->code_id);
+        $code->touch();
+        // get other user
+        $match = User::where(function($query) use ($user){
+            $query->where('id', '!=', $user->id)
+                  ->where('code_id', $user->code_id);
+        })->first();
     }
 
-    return $user;
+    if(!empty($match->id)){
+        return $match;
+    }
+
+    return null;
+    
 }));
