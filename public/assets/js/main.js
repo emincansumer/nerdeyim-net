@@ -12,6 +12,7 @@ App.markerIcon = new google.maps.MarkerImage(
     new google.maps.Point(0,0) //anchor 
 );
 App.mapCentered = false;
+App.directionsDisplay = {}
 
 /**
  * Application methods
@@ -109,7 +110,7 @@ App.refreshStatus = function(lat, lng) {
         dataType : 'json',
         cache : false,
         success : function(data) {
-            if(typeof data.id !== 'undefined') {
+            if(data !== null) {
                 App.updateYourLocation(data.lat, data.lng);
             }
             App.updateMyLocation(lat, lng);
@@ -143,13 +144,48 @@ App.updateMyLocation = function(lat, lng) {
 
 // updates location  of other user
 App.updateYourLocation = function(lat, lng) {
+    try{
+        App.yourMarker.setMap(null);
+        App.yourMarker = {};
+    } catch(err) {
+        
+    }
     var latlng = new google.maps.LatLng(lat, lng);
     App.yourMarker = new google.maps.Marker({
         position: latlng,
         icon: App.markerIcon,
     });
-    App.yourMarker.setMap(null);
     App.yourMarker.setMap(App.map);
+    App.showRoute();
+}
+
+// shows route between two marker
+App.showRoute = function() {
+    try{
+        App.directionsDisplay.setMap(null);
+        App.directionsDisplay = {};
+    } catch(err) {
+        
+    }
+    var directionsService = new google.maps.DirectionsService();
+    App.directionsDisplay = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+        polylineOptions: {
+            strokeColor: "red"
+        }
+    });
+    App.directionsDisplay.setMap(App.map);
+    var request = {
+        origin: App.myMarker.getPosition(),
+        destination: App.yourMarker.getPosition(),
+        travelMode: google.maps.TravelMode.DRIVING,
+        provideRouteAlternatives: false
+    };
+    directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            App.directionsDisplay.setDirections(response);
+        }
+    });
 }
 
 // redirect function
