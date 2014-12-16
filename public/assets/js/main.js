@@ -170,6 +170,7 @@ App.showRoute = function() {
     var directionsService = new google.maps.DirectionsService();
     App.directionsDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
+        preserveViewport: true,
         polylineOptions: {
             strokeColor: "red"
         }
