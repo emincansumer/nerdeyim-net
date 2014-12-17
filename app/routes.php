@@ -60,7 +60,7 @@ Route::get('{code}', array('before' => 'threedigit', function($code)
     // only allow max. 2 people in a share session
     if($num_of_users < 2) {
         $user = User::create(array('code_id' => $room->id));
-        return View::make('map', compact('user'));
+        return View::make('map', compact('user', 'room'));
     }
 
     return Redirect::to('/');

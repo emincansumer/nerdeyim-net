@@ -32,6 +32,7 @@
 
     <header class="bar bar-nav">
         <h1 class="title">@yield('pageTitle', 'Nerdeyim.net')</h1>
+        @yield('headerButtons')
     </header>
 
     <div class="content">
