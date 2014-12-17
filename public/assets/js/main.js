@@ -52,6 +52,10 @@ App.bindEvents = function() {
             }
         });
     });
+    // join location share form
+    $('.main-form').unbind('submit').bind('submit', function(){
+        return false;
+    });
 }
 
 // Map page functions
