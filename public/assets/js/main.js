@@ -3,6 +3,7 @@
  */
 App.loadingText = 'Yükleniyor...';
 App.shareLocationText = 'Konumumu Paylaş';
+App.joinText = 'Katıl';
 App.notSupportedLocation = 'Tarayıcınız konum bulma özelliğini desteklemiyor';
 App.map = App.myMarker = App.yourMarker = {};
 App.markerIcon = new google.maps.MarkerImage(
@@ -54,6 +55,30 @@ App.bindEvents = function() {
     });
     // join location share form
     $('.main-form').unbind('submit').bind('submit', function(){
+        $that = $(this);
+        $that.find('button[type=submit]').attr('disabled', 'disabled').text(App.loadingText);
+        $.ajax({
+            type : "GET",
+            url : App.siteURL + '/check-code',
+            data : { code : $('#code').val() },
+            dataType : 'json',
+            cache : false,
+            success : function(data) {
+                // catch errors in result
+                if(data.error){
+                    alert(data.error.message);
+                } else {
+                    console.log(data);
+                    App.redirect(data.code);
+                }
+            },
+            error : function(xhr, textStatus, errorThrown){
+                
+            },
+            complete : function(xhr, textStatus) {
+                $that.find('button[type=submit]').removeAttr('disabled').text(App.joinText);
+            }
+        });
         return false;
     });
 }

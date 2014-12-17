@@ -43,11 +43,40 @@ Route::get('/create', array('before' => 'nonajax', function()
                 'type'    => 'Server',
                 'message' => 'Hata oluştu! Lütfen tekrar deneyiniz.',
                 'file'    => 'routes',
-                'line'    => 37,
+                'line'    => 42,
             ));
         }
     }
     
+}));
+
+/**
+ * Check the code
+ */
+Route::get('/check-code', array('before' => 'nonajax', function()
+{
+    $code = Code::where('value', Input::get('code'))->first();
+    // the code isn't found
+    if(!$code) {
+        return array('error' => array(
+            'type'    => 'App',
+            'message' => 'Kod bulunamadı. Lütfen doğruluğundan emin olup tekrar deneyiniz.',
+            'file'    => 'routes',
+            'line'    => 60,
+        ));
+    }
+    // check if the code is already in use by two users
+    $num_of_users = User::where('code_id', $code->id)->count();
+    if($num_of_users >= 2){
+        return array('error' => array(
+            'type'    => 'App',
+            'message' => 'Kod kullanımda. Lütfen yeni bir paylaşım başlatınız.',
+            'file'    => 'routes',
+            'line'    => 69,
+        ));
+    }
+    // code is available, so send it back again
+    return array('code' => $code->value);
 }));
 
 /**
